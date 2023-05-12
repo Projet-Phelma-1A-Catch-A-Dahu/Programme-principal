@@ -1,0 +1,5 @@
+image_viewerPresenter.hpp:28:13:image_viewerPresenter::~image_viewerPresenter()	1
+image_viewerPresenter.cpp:10:6:virtual void image_viewerPresenter::activate()	1
+image_viewerPresenter.hpp:28:13:virtual image_viewerPresenter::~image_viewerPresenter()	1
+image_viewerPresenter.hpp:28:13:virtual void* image_viewerPresenter::_ZThn4_N21image_viewerPresenterD1Ev()	1
+image_viewerPresenter.cpp:4:1:image_viewerPresenter::image_viewerPresenter(image_viewerView&)	1

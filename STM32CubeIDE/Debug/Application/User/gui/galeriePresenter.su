@@ -1,0 +1,5 @@
+../../TouchGFX/gui/include/gui/galerie_screen/galeriePresenter.hpp:28:13:galeriePresenter::~galeriePresenter()	0	static
+C:/TouchGFXProjects/MyApplication_4/TouchGFX/gui/src/galerie_screen/galeriePresenter.cpp:10:6:virtual void galeriePresenter::activate()	0	static
+../../TouchGFX/gui/include/gui/galerie_screen/galeriePresenter.hpp:28:13:virtual galeriePresenter::~galeriePresenter()	8	static
+../../TouchGFX/gui/include/gui/galerie_screen/galeriePresenter.hpp:28:13:virtual void* galeriePresenter::_ZThn4_N16galeriePresenterD1Ev()	0	static
+C:/TouchGFXProjects/MyApplication_4/TouchGFX/gui/src/galerie_screen/galeriePresenter.cpp:4:1:galeriePresenter::galeriePresenter(galerieView&)	8	static

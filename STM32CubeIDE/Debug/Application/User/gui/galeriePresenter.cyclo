@@ -1,0 +1,5 @@
+galeriePresenter.hpp:28:13:galeriePresenter::~galeriePresenter()	1
+galeriePresenter.cpp:10:6:virtual void galeriePresenter::activate()	1
+galeriePresenter.hpp:28:13:virtual galeriePresenter::~galeriePresenter()	1
+galeriePresenter.hpp:28:13:virtual void* galeriePresenter::_ZThn4_N16galeriePresenterD1Ev()	1
+galeriePresenter.cpp:4:1:galeriePresenter::galeriePresenter(galerieView&)	1

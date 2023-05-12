@@ -1,0 +1,5 @@
+homePresenter.hpp:28:13:homePresenter::~homePresenter()	1
+homePresenter.cpp:10:6:virtual void homePresenter::activate()	1
+homePresenter.hpp:28:13:virtual homePresenter::~homePresenter()	1
+homePresenter.hpp:28:13:virtual void* homePresenter::_ZThn4_N13homePresenterD1Ev()	1
+homePresenter.cpp:4:1:homePresenter::homePresenter(homeView&)	1

@@ -1,0 +1,5 @@
+../../TouchGFX/gui/include/gui/home_screen/homePresenter.hpp:28:13:homePresenter::~homePresenter()	0	static
+C:/TouchGFXProjects/MyApplication_4/TouchGFX/gui/src/home_screen/homePresenter.cpp:10:6:virtual void homePresenter::activate()	0	static
+../../TouchGFX/gui/include/gui/home_screen/homePresenter.hpp:28:13:virtual homePresenter::~homePresenter()	8	static
+../../TouchGFX/gui/include/gui/home_screen/homePresenter.hpp:28:13:virtual void* homePresenter::_ZThn4_N13homePresenterD1Ev()	0	static
+C:/TouchGFXProjects/MyApplication_4/TouchGFX/gui/src/home_screen/homePresenter.cpp:4:1:homePresenter::homePresenter(homeView&)	8	static

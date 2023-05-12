@@ -1,0 +1,5 @@
+../../TouchGFX/gui/include/gui/image_viewer_screen/image_viewerPresenter.hpp:28:13:image_viewerPresenter::~image_viewerPresenter()	0	static
+C:/TouchGFXProjects/MyApplication_4/TouchGFX/gui/src/image_viewer_screen/image_viewerPresenter.cpp:10:6:virtual void image_viewerPresenter::activate()	0	static
+../../TouchGFX/gui/include/gui/image_viewer_screen/image_viewerPresenter.hpp:28:13:virtual image_viewerPresenter::~image_viewerPresenter()	8	static
+../../TouchGFX/gui/include/gui/image_viewer_screen/image_viewerPresenter.hpp:28:13:virtual void* image_viewerPresenter::_ZThn4_N21image_viewerPresenterD1Ev()	0	static
+C:/TouchGFXProjects/MyApplication_4/TouchGFX/gui/src/image_viewer_screen/image_viewerPresenter.cpp:4:1:image_viewerPresenter::image_viewerPresenter(image_viewerView&)	8	static
