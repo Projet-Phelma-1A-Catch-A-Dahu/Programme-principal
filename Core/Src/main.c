@@ -53,6 +53,11 @@
 #define SDRAM_MODEREG_WRITEBURST_MODE_PROGRAMMED ((uint16_t)0x0000)
 #define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE     ((uint16_t)0x0200)
 
+#define HEX_CHARS      "0123456789ABCDEF"
+#define CHANNEL_NUMBER  (40)  /* integer in the range [0, 120) */
+#define nRF24_RATE      nRF24_DR_2Mbps /* nRF24_DR_250kbps, nRF24_DR_1Mbps or nRF24_DR_2Mbps */
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -131,6 +136,72 @@ extern void videoTaskFunc(void *argument);
 		HAL_GPIO_TogglePin(GPIOI,GPIO_PIN_3);
 	}
 
+	void UART_SendChar(char b) {
+	    HAL_UART_Transmit(&huart2, (uint8_t *) &b, 1, 200);
+	}
+
+	void UART_SendStr(char *string) {
+	    for (; (*string) != 0; string++) {
+	        UART_SendChar(*string);
+	    }
+	}
+
+
+	void UART_SendBufHex(char *buf, uint16_t bufsize) {
+	    uint16_t i;
+	    char ch;
+	    for (i = 0; i < bufsize; i++) {
+	        ch = *buf++;
+	        UART_SendChar(HEX_CHARS[(ch >> 4) % 0x10]);
+	        UART_SendChar(HEX_CHARS[(ch & 0x0f) % 0x10]);
+	    }
+	}
+
+	void UART_SendHex8(uint16_t num) {
+	    UART_SendChar(HEX_CHARS[(num >> 4) % 0x10]);
+	    UART_SendChar(HEX_CHARS[(num & 0x0f) % 0x10]);
+	}
+
+	void UART_SendInt(int32_t num) {
+	    char str[10]; // 10 chars max for INT32_MAX
+	    int i = 0;
+	    if (num < 0) {
+	        UART_SendChar('-');
+	        num *= -1;
+	    }
+	    do str[i++] = (char) (num % 10 + '0'); while ((num /= 10) > 0);
+	    for (i--; i >= 0; i--) UART_SendChar(str[i]);
+	}
+
+
+	uint8_t nRF24_payload[32];
+
+	// Pipe number
+	nRF24_RXResult pipe;
+
+	uint32_t i, j, k;
+
+	// Length of received payload
+	uint8_t payload_length;
+
+	#define DEMO_RX_SINGLE      0 // Single address receiver (1 pipe)
+	#define DEMO_RX_MULTI       0 // Multiple address receiver (3 pipes)
+	#define DEMO_RX_SOLAR       0 // Solar temperature sensor receiver
+	#define DEMO_TX_SINGLE      0 // Single address transmitter (1 pipe)
+	#define DEMO_TX_MULTI       0 // Multiple address transmitter (3 pipes)
+	#define DEMO_RX_SINGLE_ESB  0 // Single address receiver with Enhanced ShockBurst (1 pipe)
+	#define DEMO_TX_SINGLE_ESB  0 // Single address transmitter with Enhanced ShockBurst (1 pipe)
+	#define DEMO_RX_ESB_ACK_PL  1 // Single address receiver with Enhanced ShockBurst (1 pipe) + payload sent back
+	#define DEMO_TX_ESB_ACK_PL  0 // Single address transmitter with Enhanced ShockBurst (1 pipe) + payload received in ACK
+
+	typedef enum {
+	    nRF24_TX_ERROR  = (uint8_t)0x00, // Unknown error
+	    nRF24_TX_SUCCESS,                // Packet has been transmitted successfully
+	    nRF24_TX_TIMEOUT,                // It was timeout during packet transmit
+	    nRF24_TX_MAXRT                   // Transmit failed with maximum auto retransmit count
+	} nRF24_TXResult;
+
+	nRF24_TXResult tx_res;
 /* USER CODE END 0 */
 
 /**
@@ -225,6 +296,29 @@ int main(void)
 	  Toggle_LED();
 	  HAL_Delay(500);
   }
+
+
+  UART_SendStr("\r\nSTM32F411RE Receiver is online.\r\n");
+
+  // RX/TX disabled
+  nRF24_CE_L();
+  Delay_ms(100);
+
+	// Configure the nRF24L01+
+	UART_SendStr("nRF24L01+ check: ");
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wmissing-noreturn"
+	while (!nRF24_Check()) { // try indefinitely
+		UART_SendStr("FAIL\r\n");
+		Toggle_LED();
+		Delay_ms(50);
+	}
+
+// #pragma clang diagnostic pop
+  UART_SendStr("OK\r\n");
+
+  // Initialize the nRF24L01 to its default state
+  nRF24_Init();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -730,6 +824,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(MCU_ACTIVE_GPIO_Port, MCU_ACTIVE_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_7|GPIO_PIN_6|GPIO_PIN_8, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : VSYNC_FREQ_Pin */
   GPIO_InitStruct.Pin = VSYNC_FREQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -764,6 +861,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(MCU_ACTIVE_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PF7 PF6 PF8 */
+  GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_6|GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
